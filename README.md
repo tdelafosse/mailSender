@@ -1,0 +1,4 @@
+mailSender
+==========
+
+A mailSender component

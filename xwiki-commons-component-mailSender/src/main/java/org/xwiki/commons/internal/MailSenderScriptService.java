@@ -20,17 +20,12 @@
 package org.xwiki.commons.internal;
 
 import java.util.Date;
-import java.util.List;
-import java.util.Properties;
 
 import org.apache.velocity.VelocityContext;
-import org.xwiki.bridge.DocumentAccessBridge;
 import org.xwiki.component.annotation.Component;
 import org.xwiki.script.service.ScriptService;
 
 import org.xwiki.commons.MailSender;
-
-import com.xpn.xwiki.api.Attachment;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -103,7 +98,7 @@ public class MailSenderScriptService implements ScriptService
     public int sendMailFromTemplate(String templateDocFullName, String from, String to, String cc, String bcc,
         String language, VelocityContext vContext)
     {
-        
+
         return this.mailSender.sendMailFromTemplate(templateDocFullName, from, to, cc, bcc, language, vContext);
     }
 

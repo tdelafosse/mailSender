@@ -28,21 +28,12 @@ import org.xwiki.commons.MailSender;
 import org.xwiki.component.annotation.Component;
 import org.xwiki.context.Execution;
 import org.xwiki.context.ExecutionContext;
-import org.xwiki.model.EntityType;
-import org.xwiki.model.reference.AttachmentReference;
 import org.xwiki.model.reference.DocumentReference;
 import org.xwiki.velocity.VelocityManager;
 
-import com.xpn.xwiki.XWiki;
 import com.xpn.xwiki.XWikiContext;
-import com.xpn.xwiki.XWikiException;
 import com.xpn.xwiki.api.Attachment;
-import com.xpn.xwiki.api.Document;
-import com.xpn.xwiki.doc.XWikiDocument;
-import com.xpn.xwiki.objects.BaseObject;
 import com.xpn.xwiki.render.XWikiVelocityRenderer;
-import com.xpn.xwiki.web.ExternalServletURLFactory;
-import com.xpn.xwiki.web.XWikiURLFactory;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -53,7 +44,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 import java.util.Scanner;
 import java.util.Map.Entry;
@@ -106,45 +96,6 @@ public class DefaultMailSender implements MailSender
     public Mail newMail(String from, String to, String cc, String bcc, String subject)
     {
         return new Mail(from, to, cc, bcc, subject);
-    }
-
-    @Override
-    public List<String> embeddedFound(Mail mail)
-    {
-        List<String> embeddedFound = new ArrayList<String>();
-        for (String[] content : mail.getContents()) {
-            if (content[0].equals("text/html")) {
-                String contentString = content[1];
-                Pattern cidPattern =
-                    Pattern.compile("src=('|\")cid:([^'\"]*)('|\")", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
-                Matcher matcher = cidPattern.matcher(contentString);
-                String filename = "";
-                while (matcher.find()) {
-                    filename = matcher.group(2);
-                    for (Attachment attachment : mail.getAttachments()) {
-                        if (filename.equals(attachment.getFilename())) {
-                            embeddedFound.add(filename);
-                        }
-                    }
-                }
-            }
-        }
-        return embeddedFound;
-    }
-
-    @Override
-    public List<String> imagesFromString(String s)
-    {
-        List<String> imagesFound = new ArrayList<String>();
-        Pattern cidPattern =
-            Pattern.compile("src=('|\")cid:([^'\"]*)('|\")", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
-        Matcher matcher = cidPattern.matcher(s);
-        String filename;
-        while (matcher.find()) {
-            filename = matcher.group(2);
-            imagesFound.add(filename);
-        }
-        return imagesFound;
     }
 
     @Override

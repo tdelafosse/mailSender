@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite failures="0" time="0.612" errors="0" skipped="0" tests="6" name="org.xwiki.commons.MailSenderTest">
+<testsuite failures="0" time="0.612" errors="0" skipped="0" tests="5" name="org.xwiki.commons.MailSenderTest">
   <properties>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
     <property name="sun.boot.library.path" value="/usr/lib/jvm/jdk1.6.0_37/jre/lib/amd64"/>
@@ -24,7 +24,7 @@
 "/>
     <property name="java.vm.specification.vendor" value="Sun Microsystems Inc."/>
     <property name="os.name" value="Linux"/>
-    <property name="classworlds.conf" value="/home/xwiki/workspace/.metadata/.plugins/org.eclipse.m2e.core/launches/m2conf4242438149750790386.tmp"/>
+    <property name="classworlds.conf" value="/home/xwiki/workspace/.metadata/.plugins/org.eclipse.m2e.core/launches/m2conf1604087990435809199.tmp"/>
     <property name="sun.jnu.encoding" value="UTF-8"/>
     <property name="java.library.path" value="/usr/lib/jvm/jdk1.6.0_37/jre/lib/amd64/server:/usr/lib/jvm/jdk1.6.0_37/jre/lib/amd64:/usr/lib/jvm/jdk1.6.0_37/jre/../lib/amd64:/usr/lib/mozilla/:/usr/java/packages/lib/amd64:/usr/lib64:/lib64:/lib:/usr/lib"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
@@ -58,10 +58,9 @@
     <property name="sun.desktop" value="gnome"/>
     <property name="sun.cpu.isalist" value=""/>
   </properties>
-  <testcase time="0.087" classname="org.xwiki.commons.MailSenderTest" name="testNewMail"/>
-  <testcase time="0.181" classname="org.xwiki.commons.MailSenderTest" name="testSendMail"/>
+  <testcase time="0.091" classname="org.xwiki.commons.MailSenderTest" name="testNewMail"/>
+  <testcase time="0.18" classname="org.xwiki.commons.MailSenderTest" name="testSendMail"/>
   <testcase time="0.004" classname="org.xwiki.commons.MailSenderTest" name="testNoRecipient"/>
   <testcase time="0.004" classname="org.xwiki.commons.MailSenderTest" name="testNoContent"/>
-  <testcase time="0.006" classname="org.xwiki.commons.MailSenderTest" name="testCalendar"/>
-  <testcase time="0.005" classname="org.xwiki.commons.MailSenderTest" name="testPlain"/>
+  <testcase time="0.005" classname="org.xwiki.commons.MailSenderTest" name="testCalendar"/>
 </testsuite>

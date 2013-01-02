@@ -23,8 +23,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.mail.Address;
 import javax.mail.Message;
@@ -40,23 +38,13 @@ import org.xwiki.bridge.DocumentAccessBridge;
 import org.xwiki.commons.internal.DefaultMailSender;
 import org.xwiki.commons.internal.Mail;
 import org.xwiki.component.util.ReflectionUtils;
-import org.xwiki.context.Execution;
-import org.xwiki.context.ExecutionContext;
-import org.xwiki.model.ModelConfiguration;
-import org.xwiki.model.reference.DocumentReference;
 import org.xwiki.test.AbstractMockingComponentTestCase;
 import org.xwiki.test.annotation.MockingRequirement;
-import org.xwiki.velocity.VelocityManager;
 
 import org.jmock.Mock;
 import org.jmock.Mockery;
 import org.jmock.Expectations;
 import org.jvnet.mock_javamail.Mailbox;
-
-import com.xpn.xwiki.XWiki;
-import com.xpn.xwiki.XWikiContext;
-import com.xpn.xwiki.doc.XWikiDocument;
-import com.xpn.xwiki.render.XWikiVelocityRenderer;
 
 /**
  * Tests for the {@link MailSender} component.
@@ -175,70 +163,6 @@ public class MailSenderTest extends AbstractMockingComponentTestCase<MailSender>
         Assert.assertEquals(0, result);
     }
 
-    /*
-    @Test
-    public void testSendMailFromTemplate()
-    {
-        final String subject = "Test";
-        final String html = "Html content";
-        final String text = "Text content";
-        Mockery mockery = getMockery();
-        final Execution execution = mockery.mock(Execution.class, "mockExecution");
-        ReflectionUtils.setFieldValue(this.mailSender, "execution", execution);
-        final Logger logger = mockery.mock(Logger.class);
-        ReflectionUtils.setFieldValue(this.mailSender, "logger", logger);
-        final DocumentAccessBridge documentAccessBridge = mockery.mock(DocumentAccessBridge.class, "mockDAB");
-        ReflectionUtils.setFieldValue(this.mailSender, "documentAccessBridge", documentAccessBridge);
-        final DocumentReference docRef = new DocumentReference("xwiki", "Sandbox", "MailTemplateTest");
-        final VelocityManager velocityManager = mockery.mock(VelocityManager.class, "vm");
-        ReflectionUtils.setFieldValue(this.mailSender, "velocityManager", velocityManager);
-        final XWikiVelocityRenderer renderer = mockery.mock(XWikiVelocityRenderer.class, "renderer");
-        ReflectionUtils.setFieldValue(this.mailSender, "XWikiVelocityRenderer", renderer);
-        final int port = 25;
-        
-        mockery.checking(new Expectations()
-        {
-            {
-                //oneOf(renderer).evaluate(with(any(String.class)), with(any(String.class)), with(any(VelocityContext.class)), with(any(XWikiContext.class)));
-                //will(returnValue(subject));
-                oneOf(documentAccessBridge).getCurrentDocumentReference();
-                will(returnValue(docRef));
-                oneOf(documentAccessBridge).getObjectNumber(with(any(DocumentReference.class)),
-                    with(any(DocumentReference.class)), with(any(String.class)), with(any(String.class)));
-                will(returnValue(1));
-                oneOf(documentAccessBridge).getProperty(with(any(DocumentReference.class)),
-                    with(any(DocumentReference.class)), with(any(Integer.class)), with(any(String.class)));
-                will(returnValue(subject));
-                oneOf(documentAccessBridge).getProperty(with(any(DocumentReference.class)),
-                    with(any(DocumentReference.class)), with(any(Integer.class)), with(any(String.class)));
-                will(returnValue(text));
-                oneOf(documentAccessBridge).getProperty(with(any(DocumentReference.class)),
-                    with(any(DocumentReference.class)), with(any(Integer.class)), with(any(String.class)));
-                will(returnValue(html));
-                oneOf(execution).getContext();
-                will(returnValue(new ExecutionContext()));
-                oneOf(documentAccessBridge).getProperty("XWiki.XWikiPreferences", "smtp_server");
-                will(returnValue("myserver"));
-                oneOf(documentAccessBridge).getProperty("XWiki.XWikiPreferences", "smtp_port");
-                will(returnValue(port));
-                oneOf(documentAccessBridge).getProperty("XWiki.XWikiPreferences", "smtp_server_username");
-                will(returnValue(""));
-                oneOf(documentAccessBridge).getProperty("XWiki.XWikiPreferences", "smtp_server_password");
-                will(returnValue(""));
-                oneOf(documentAccessBridge).getProperty("XWiki.XWikiPreferences", "javamail_extra_props");
-                will(returnValue(""));
-                oneOf(logger).info("Sending mail : Initializing properties");
-            }
-        });
-        String templateDocFullName = "Sandbox.Template";
-        VelocityContext vContext = new VelocityContext();
-        int result =
-            this.mailSender.sendMailFromTemplate(templateDocFullName, "john@acme.org", "peter@acme.org", null, null,
-                "en", vContext);
-        Assert.assertEquals(1, result);
-    }
-    */
-
     @Test
     public void testCalendar() // Check that the dates in the calendar are correctly formated
     {
@@ -255,13 +179,5 @@ public class MailSenderTest extends AbstractMockingComponentTestCase<MailSender>
         Scanner getLine = new Scanner(endCalendar);
         getLine.useDelimiter("\n");
         Assert.assertEquals("20130101T090505Z", getLine.next());
-    }
-
-    @Test
-    public void testPlain()
-    {
-        String html = "<p>This is a test</p> <br> <a href='test'>Test</a>";
-        String text = this.mailSender.createPlain(html);
-        Assert.assertEquals("This is a test Test", text);
     }
 }

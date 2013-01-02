@@ -39,17 +39,11 @@ public interface MailSender
 
     Properties initProperties();
 
-    String createPlain(String html);
-
-    List<String> embeddedFound(Mail mail);
-
-    List<String> imagesFromString(String s);
+    String createCalendar(String location, String summary, Date startDate, Date endDate);
 
     int send(Mail mail);
 
     int sendMailFromTemplate(String templateDocFullName, String from, String to, String cc, String bcc,
         String language, VelocityContext vContext);
-
-    String createCalendar(String location, String summary, Date startDate, Date endDate);
 
 }

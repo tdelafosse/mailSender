@@ -109,6 +109,7 @@ public class MailSenderTest extends AbstractMockingComponentTestCase<MailSender>
         Mail mail =
             this.mailSender.newMail("john@acme.org", "peter@acme.org, alfred@acme.org", null, null, "Test subject");
         mail.addContent("text/html", "<p>Test</p>");
+        mail.addContent("text/plain", "Test");
         int result = this.mailSender.send(mail);
         mockery.assertIsSatisfied();
         Assert.assertEquals(1, result);

@@ -21,14 +21,20 @@ package org.xwiki.commons.internal;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.velocity.VelocityContext;
-import org.jsoup.Jsoup;
 import org.slf4j.Logger;
 import org.xwiki.bridge.DocumentAccessBridge;
 import org.xwiki.commons.MailSender;
 import org.xwiki.component.annotation.Component;
+import org.xwiki.component.manager.ComponentManager;
 import org.xwiki.context.Execution;
 import org.xwiki.context.ExecutionContext;
 import org.xwiki.model.reference.DocumentReference;
+
+import org.xwiki.rendering.parser.StreamParser;
+import org.xwiki.rendering.renderer.PrintRendererFactory;
+import org.xwiki.rendering.renderer.printer.DefaultWikiPrinter;
+import org.xwiki.rendering.renderer.printer.WikiPrinter;
+import org.xwiki.rendering.syntax.Syntax;
 import org.xwiki.velocity.VelocityManager;
 
 import com.xpn.xwiki.XWikiContext;
@@ -40,6 +46,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -66,6 +73,7 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 /**
@@ -91,6 +99,13 @@ public class DefaultMailSender implements MailSender
 
     @Inject
     private Execution execution;
+
+    @Inject
+    @Named("html/4.01")
+    private StreamParser htmlStreamParser;
+
+    @Inject
+    private ComponentManager componentManager;
 
     @Override
     public Mail newMail(String from, String to, String cc, String bcc, String subject)
@@ -346,8 +361,19 @@ public class DefaultMailSender implements MailSender
 
     public String createPlain(String html)
     {
-        String text = Jsoup.parse(html).text();
-        return text;
+        String converted = null;
+        try {
+
+            WikiPrinter printer = new DefaultWikiPrinter();
+            PrintRendererFactory printRendererFactory =
+                componentManager.getInstance(PrintRendererFactory.class, Syntax.PLAIN_1_0.toIdString());
+            htmlStreamParser.parse(new StringReader(html), printRendererFactory.createRenderer(printer));
+            converted = printer.toString();
+        } catch (Throwable t) {
+            logger.warn("Conversion from HTML to plain text threw exception", t);
+            converted = null;
+        }
+        return converted;
     }
 
     public Properties initProperties()

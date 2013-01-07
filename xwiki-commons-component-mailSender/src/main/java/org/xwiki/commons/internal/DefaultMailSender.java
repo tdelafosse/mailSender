@@ -39,6 +39,8 @@ import org.xwiki.velocity.VelocityManager;
 
 import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.api.Attachment;
+import com.xpn.xwiki.api.Document;
+import com.xpn.xwiki.doc.XWikiDocument;
 import com.xpn.xwiki.render.XWikiVelocityRenderer;
 
 import java.io.ByteArrayInputStream;
@@ -117,6 +119,13 @@ public class DefaultMailSender implements MailSender
     public int sendMailFromTemplate(String templateDocFullName, String from, String to, String cc, String bcc,
         String language, VelocityContext vContext)
     {
+        if (!documentAccessBridge.hasProgrammingRights()) // Forbids the use of a template created by a user having no
+                                                          // programming rights
+        {
+            logger
+                .error("No mail has been sent : The author of the document needs programming rights to be able to use the sendMailFromTemplate method");
+            return 0;
+        }
         try {
             ExecutionContext context = this.execution.getContext();
             XWikiContext xwikiContext = (XWikiContext) context.getProperty("xwikicontext");
@@ -144,6 +153,13 @@ public class DefaultMailSender implements MailSender
                 return 0;
             }
             DocumentReference template = new DocumentReference(wiki, templateSpace, templatePage);
+            boolean hasRight = checkAccess(template, xwikiContext);
+            if (!hasRight) // If the current user is not allowed to view the page of the template, he can't use it to
+                           // send mails
+            {
+                logger.error("You haven't the right to use this mail template !");
+                return 0;
+            }
             DocumentReference mailClass = new DocumentReference(wiki, "XWiki", "Mail");
             int n = -1;
 
@@ -179,6 +195,13 @@ public class DefaultMailSender implements MailSender
             return 0;
         }
 
+    }
+
+    private boolean checkAccess(DocumentReference document, XWikiContext context)
+    {
+        XWikiDocument xdoc = new XWikiDocument(document);
+        Document doc = new Document(xdoc, context);
+        return doc.checkAccess("view");
     }
 
     @Override

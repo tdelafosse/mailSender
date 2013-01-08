@@ -21,6 +21,7 @@ package org.xwiki.commons;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import org.apache.velocity.VelocityContext;
@@ -46,4 +47,6 @@ public interface MailSender
     int sendMailFromTemplate(String templateDocFullName, String from, String to, String cc, String bcc,
         String language, VelocityContext vContext);
 
+    int sendMailFromTemplate(String templateDocFullName, String from, String to, String cc, String bcc,
+        String language, Map<String,Object> parameters);
 }

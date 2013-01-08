@@ -20,6 +20,7 @@
 package org.xwiki.commons.internal;
 
 import java.util.Date;
+import java.util.Map;
 
 import org.apache.velocity.VelocityContext;
 import org.xwiki.component.annotation.Component;
@@ -45,9 +46,9 @@ public class MailSenderScriptService implements ScriptService
     /**
      * Create a new Mail object
      * 
-     * @param from Email sender
-     * @param to Email recipient
-     * @param subject Email subject
+     * @param from Mail sender
+     * @param to Mail recipient
+     * @param subject Mail subject
      * @return a Mail object
      */
     public Mail newMail(String from, String to, String subject)
@@ -58,11 +59,11 @@ public class MailSenderScriptService implements ScriptService
     /**
      * Create a new Mail object
      * 
-     * @param from Email sender
-     * @param to Email recipient
-     * @param cc Email CarbonCopy
-     * @param bcc Email Hidden Carbon Copy
-     * @param subject Email subject
+     * @param from Mail sender
+     * @param to Mail recipient
+     * @param cc Mail CarbonCopy
+     * @param bcc Mail Hidden Carbon Copy
+     * @param subject Mail subject
      * @return a Mail object
      */
     public Mail newMail(String from, String to, String cc, String bcc, String subject)
@@ -83,7 +84,7 @@ public class MailSenderScriptService implements ScriptService
 
     /**
      * Uses an XWiki document to build the message subject and context, based on variables stored in the
-     * VelocityContext. Sends the email.
+     * VelocityContext. Sends the mail.
      * 
      * @param templateDocFullName Full name of the template to be used (example: XWiki.MyEmailTemplate). The template
      *            needs to have an XWiki.Email object attached
@@ -92,7 +93,7 @@ public class MailSenderScriptService implements ScriptService
      * @param cc Email Carbon Copy
      * @param bcc Email Hidden Carbon Copy
      * @param language Language of the email
-     * @param vcontext Velocity context passed to the velocity renderer
+     * @param vcontext Velocity context passed to the velocity renderer.
      * @return True if the email has been sent
      */
     public int sendMailFromTemplate(String templateDocFullName, String from, String to, String cc, String bcc,
@@ -103,11 +104,32 @@ public class MailSenderScriptService implements ScriptService
     }
 
     /**
-     * Send a mail having the properties specified
+     * Uses an XWiki document to build the message subject and context, based on variables stored in the current
+     * VelocityContext and in the Map parameters. Sends the mail.
      * 
+     * @param templateDocFullName Full name of the template to be used (example: XWiki.MyEmailTemplate). The template
+     *            needs to have an XWiki.Email object attached
      * @param from Email sender
      * @param to Email recipient
-     * @param subject Email subject
+     * @param cc Email Carbon Copy
+     * @param bcc Email Hidden Carbon Copy
+     * @param language Language of the email
+     * @param parameters Parameters to add to the current velocity context
+     * @return True if the email has been sent
+     */
+    public int sendMailFromTemplate(String templateDocFullName, String from, String to, String cc, String bcc,
+        String language, Map<String, Object> parameters)
+    {
+
+        return this.mailSender.sendMailFromTemplate(templateDocFullName, from, to, cc, bcc, language, parameters);
+    }
+
+    /**
+     * Send a mail having the properties specified
+     * 
+     * @param from Mail sender
+     * @param to Mail recipient
+     * @param subject Mail subject
      * @param html Mail html content
      * @param alternative Mail alternative text content.
      * @return 1 if the email has been sent

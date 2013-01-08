@@ -53,6 +53,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Scanner;
 import java.util.Map.Entry;
@@ -113,6 +114,17 @@ public class DefaultMailSender implements MailSender
     public Mail newMail(String from, String to, String cc, String bcc, String subject)
     {
         return new Mail(from, to, cc, bcc, subject);
+    }
+
+    @Override
+    public int sendMailFromTemplate(String templateDocFullName, String from, String to, String cc, String bcc,
+        String language, Map<String, Object> parameters)
+    {
+        VelocityContext vContext = velocityManager.getVelocityContext();
+        for (Map.Entry<String, Object> entry : parameters.entrySet()) {
+            vContext.put(entry.getKey(), entry.getValue());
+        }
+        return sendMailFromTemplate(templateDocFullName, from, to, cc, bcc, language, vContext);
     }
 
     @Override
